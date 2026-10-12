@@ -1,34 +1,33 @@
 classdef Physics
-    
-    %% Physics class to store Darcy's law and important material properties:
-    % The physics class serves to store the domain material properties:
-    % viscosity, porosity, thickness (2d -> 3d scaling).
+
+    %% Physics: material properties for Darcy flow on a shell.
+    %
+    % Identical to the 2D version.  The only difference the caller needs to
+    % be aware of is that the permeability function K(centroid) will receive
+    % a 1x3 position vector when used with ShellMesh, and must return a
+    % 2x2 matrix expressed in the LOCAL element frame (principal directions
+    % in the surface plane).
+    %
+    % For isotropic permeability the function body is the same:
+    %   K = @(x)  k * eye(2)
+    %
+    % For anisotropic permeability the 2x2 tensor rows/columns correspond
+    % to the local e1 and e2 axes of each element.
 
     properties
-        %% Material properties
         viscosity;
         porosity;
         thickness;
-        permeability;
+        permeability;   % function handle  K(centroid3D) -> 2x2 matrix
     end
 
     methods
-
-        %% Darcy class methods:
-        % A constructor that inputs 3 functions for each of the material
-        % properties. These must be defined within matlab before entering
-        % into the constructor function.
-
         function obj = Physics(viscosity, porosity, thickness, permeability)
-
-            obj.viscosity = viscosity;
-            obj.porosity = porosity;
-            obj.thickness = thickness;
+            obj.viscosity    = viscosity;
+            obj.porosity     = porosity;
+            obj.thickness    = thickness;
             obj.permeability = permeability;
-
         end
-
-
     end
 
 end
